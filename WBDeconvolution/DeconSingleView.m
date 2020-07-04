@@ -13,7 +13,7 @@ prompt = {'Enter deconvolution method: 1 for traditional decon; 2 for WB',...
     'Enter processing mode: 0 for CPU; 1 for GPU', 'Enter iteration number: ', ...
     'Enter time points to be processed'};
 num_lines = 2;
-defaultans = {'2','1','1','0-2'};
+defaultans = {'2','0','1','0-2'};
 answer = inputdlg(prompt,dlg_title,num_lines,defaultans);
 deconMethod = str2num(answer{1});
 proMode = str2num(answer{2});
@@ -77,10 +77,10 @@ else
 end
 disp('Start deconvolution...');
 smallValue = 0.001;
-for imgNum = t1:t2
-    disp(['...Processing image #: ' num2str(imgNum)]);
-    fileIn = [path_data, 'Stack_', num2str(imgNum), '.tif']; %
-    stackIn = single(ReadTifStack(fileIn));
+%for imgNum = t1:t2
+    disp(['...Processing image ']);
+ %   fileIn = [path_data, 'Stack_', num2str(imgNum), '.tif']; %
+ %   stackIn = single(ReadTifStack(fileIn));
     if(gpuFlag)
         stack = gpuArray(single(stackIn));
     else
@@ -103,8 +103,8 @@ for imgNum = t1:t2
     else
         output = stackEstimate;
     end
-    WriteTifStack(output, [path_output, 'Decon_', num2str(imgNum), '.tif'], 16);
-end
+    WriteTifStack(output, [path_output, 'Decon_', num2str(itNum), '_', bp_type, '.tif'], 32);
+%end
 if(gpuFlag) % reset GPU
     reset(g); 
 end
